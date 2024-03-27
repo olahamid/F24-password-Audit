@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity 0.8.18; //q is this the correct compiler version 
 
 /*
  * @author not-so-secure-dev
@@ -10,26 +10,34 @@ pragma solidity 0.8.18;
 contract PasswordStore {
     error PasswordStore__NotOwner();
 
-    address private s_owner;
-    string private s_password;
+    address private s_owner; //0 storage space 
+    //@auduit the private s_password is not actually private, eveerything is public on the blockchain
+    string private s_password;// 1 storage space
+
 
     event SetNetPassword();
 
     constructor() {
         s_owner = msg.sender;
     }
+ 
 
     /*
      * @notice This function allows only the owner to set a new password.
      * @param newPassword The new password to set.
      */
+    //q- can a none owner set the password, if yes.... should a non owner be able to set a password
+    // @audit -any user can set a password
+    //this vulnubility is called missiing access control
     function setPassword(string memory newPassword) external {
+        
         s_password = newPassword;
         emit SetNetPassword();
     }
 
     /*
      * @notice This allows only the owner to retrieve the password.
+   
      * @param newPassword The new password to set.
      */
     function getPassword() external view returns (string memory) {
